@@ -101,7 +101,7 @@ public final class BlockSelector {
         if (shape.isEmpty()) return false;
         VertexRendering.drawOutline(ms, vc, shape,
                 pos.getX() - cam.x, pos.getY() - cam.y, pos.getZ() - cam.z,
-                net.minecraft.util.math.ColorHelper.getArgb(255, Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)), 1.0f);
+                (0xFF000000 | (Math.round(r * 255) << 16) | (Math.round(g * 255) << 8) | Math.round(b * 255)), 1.0f);
         return true;
     }
 }
