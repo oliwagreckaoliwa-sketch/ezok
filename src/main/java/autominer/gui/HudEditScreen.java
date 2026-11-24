@@ -30,7 +30,7 @@ public final class HudEditScreen extends Screen {
         sizeH = size[1];
         HudRenderer.draw(ctx, textRenderer, lines, cfg.hudX, cfg.hudY, (float) cfg.hudScale,
                 Math.max(0.5f, (float) cfg.hudOpacity));
-        ctx.drawBorder(cfg.hudX - 1, cfg.hudY - 1, sizeW + 2, sizeH + 2, Draw.alpha(Draw.accent(cfg.accentIndex), 0.9f));
+        ctx.drawStrokedRectangle(cfg.hudX - 1, cfg.hudY - 1, sizeW + 2, sizeH + 2, Draw.alpha(Draw.accent(cfg.accentIndex), 0.9f));
         ctx.drawCenteredTextWithShadow(textRenderer, "Drag the HUD to move it | scroll to resize | ESC to finish",
                 width / 2, height - 22, Draw.TEXT);
         ctx.drawCenteredTextWithShadow(textRenderer, String.format("Scale %.2f", cfg.hudScale),
