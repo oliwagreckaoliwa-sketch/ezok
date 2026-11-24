@@ -125,11 +125,11 @@ public final class Ui {
     public void textScaled(String s, int x, int y, int color, float sc) {
         int c = col(color);
         if (((c >>> 24) & 0xFF) < 8) return;
-        ctx.getMatrices().push();
-        ctx.getMatrices().translate((float) x, (float) y, 0f);
-        ctx.getMatrices().scale(sc, sc, 1f);
+        ctx.getMatrices().pushMatrix();
+        ctx.getMatrices().translate((float) x, (float) y);
+        ctx.getMatrices().scale(sc, sc);
         ctx.drawText(tr, s, 0, 0, c, false);
-        ctx.getMatrices().pop();
+        ctx.getMatrices().popMatrix();
     }
 
     public String fit(String s, int maxW) {
