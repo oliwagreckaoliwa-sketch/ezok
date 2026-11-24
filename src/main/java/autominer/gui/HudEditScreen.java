@@ -5,6 +5,7 @@ import autominer.config.ModConfig;
 import autominer.hud.AutoMinerHud;
 import autominer.hud.HudRenderer;
 import java.util.List;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -17,9 +18,7 @@ public final class HudEditScreen extends Screen {
     private int sizeW = 100;
     private int sizeH = 60;
 
-    public HudEditScreen() {
-        super(Text.literal("HUD position"));
-    }
+    public HudEditScreen() { super(Text.literal("HUD position")); }
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
@@ -39,34 +38,35 @@ public final class HudEditScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(Click click, boolean doubled) {
         ModConfig cfg = ConfigManager.get();
-        if (button == 0 && mouseX >= cfg.hudX && mouseX < cfg.hudX + sizeW
+        double mouseX = click.x(), mouseY = click.y();
+        if (click.button() == 0 && mouseX >= cfg.hudX && mouseX < cfg.hudX + sizeW
                 && mouseY >= cfg.hudY && mouseY < cfg.hudY + sizeH) {
             dragging = true;
             offX = (int) mouseX - cfg.hudX;
             offY = (int) mouseY - cfg.hudY;
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+    public boolean mouseDragged(Click click, double deltaX, double deltaY) {
         if (dragging) {
             ModConfig cfg = ConfigManager.get();
-            cfg.hudX = Math.max(0, Math.min(width - sizeW, (int) mouseX - offX));
-            cfg.hudY = Math.max(0, Math.min(height - sizeH, (int) mouseY - offY));
+            cfg.hudX = Math.max(0, Math.min(width - sizeW, (int) click.x() - offX));
+            cfg.hudY = Math.max(0, Math.min(height - sizeH, (int) click.y() - offY));
             ConfigManager.markDirty();
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return super.mouseDragged(click, deltaX, deltaY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(Click click) {
         dragging = false;
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(click);
     }
 
     @Override
@@ -78,18 +78,7 @@ public final class HudEditScreen extends Screen {
         return true;
     }
 
-    @Override
-    public void close() {
-        client.setScreen(new MainScreen(5));
-    }
-
-    @Override
-    public void removed() {
-        ConfigManager.save();
-    }
-
-    @Override
-    public boolean shouldPause() {
-        return false;
-    }
+    @Override public void close() { client.setScreen(new MainScreen(5)); }
+    @Override public void removed() { ConfigManager.save(); }
+    @Override public boolean shouldPause() { return false; }
 }
