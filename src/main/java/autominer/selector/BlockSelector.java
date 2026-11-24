@@ -68,9 +68,9 @@ public final class BlockSelector {
             if (c.world == null || c.player == null || c.currentScreen != null) return;
             ModConfig cfg = ConfigManager.get();
             VertexConsumerProvider consumers = ctx.consumers();
-            MatrixStack ms = ctx.matrixStack();
+            MatrixStack ms = ctx.matrices();
             if (consumers == null || ms == null) return;
-            Vec3d cam = ctx.camera().getPos();
+            Vec3d cam = c.gameRenderer.getCamera().getCameraPos();
             VertexConsumer vc = consumers.getBuffer(RenderLayer.getLines());
             boolean drew = false;
 
