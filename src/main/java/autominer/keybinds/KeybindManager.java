@@ -46,7 +46,7 @@ public final class KeybindManager {
     public static void tick(MinecraftClient c) {
         boolean inGame = c.player != null && c.world != null;
         boolean free = inGame && c.currentScreen == null;
-        while (addBlock.wasPressed()) { if (free) AutoMiner.selector.handleKey(c, Screen.hasShiftDown()); }
+        while (addBlock.wasPressed()) { if (free) AutoMiner.selector.handleKey(c, (InputUtil.isKeyPressed(c.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(c.getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT))); }
         while (toggleMiner.wasPressed()) { if (inGame) AutoMiner.mining.toggle(); }
         while (pauseMiner.wasPressed()) { if (inGame) AutoMiner.mining.togglePause(); }
         while (toggleDeposit.wasPressed()) { if (inGame) AutoMiner.deposit.toggleEnabled(); }
