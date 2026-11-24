@@ -61,7 +61,7 @@ public final class ToolManager {
     /** Opis kilofa do dashboardu/HUD: aktualnie trzymany, a w razie braku - pierwszy z paska. */
     public static ToolInfo describe(ClientPlayerEntity p) {
         if (p == null) return new ToolInfo(false, "NONE", 0);
-        ItemStack held = p.getInventory().getStack(p.getInventory().selectedSlot);
+        ItemStack held = p.getInventory().getStack(p.getInventory().getSelectedSlot());
         ItemStack use = held.isIn(ItemTags.PICKAXES) ? held : ItemStack.EMPTY;
         if (use.isEmpty()) {
             for (int i = 0; i < 9; i++) {
