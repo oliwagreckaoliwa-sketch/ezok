@@ -3,7 +3,7 @@ package autominer.selector;
 import autominer.AutoMiner;
 import autominer.config.ModConfig;
 import autominer.config.ConfigManager;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.MinecraftClient;
