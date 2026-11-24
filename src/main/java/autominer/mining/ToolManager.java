@@ -7,8 +7,8 @@ import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.ItemTags;
 
 /** Wybor kilofa z paska szybkiego dostepu (szybkosc, Efficiency, wytrzymalosc). */
 public final class ToolManager {
@@ -36,7 +36,7 @@ public final class ToolManager {
         float bestScore = -1f;
         for (int i = 0; i < 9; i++) {
             ItemStack s = p.getInventory().getStack(i);
-            if (!(s.getItem() instanceof PickaxeItem)) continue;
+            if (!s.isIn(ItemTags.PICKAXES)) continue;
             if (durabilityLeft(s) <= minDurability) continue;
             float speed = s.getMiningSpeedMultiplier(state);
             int eff = efficiencyLevel(s);
@@ -53,7 +53,7 @@ public final class ToolManager {
     public static boolean hasUsablePickaxe(ClientPlayerEntity p, int minDurability) {
         for (int i = 0; i < 9; i++) {
             ItemStack s = p.getInventory().getStack(i);
-            if (s.getItem() instanceof PickaxeItem && durabilityLeft(s) > minDurability) return true;
+            if (s.isIn(ItemTags.PICKAXES) && durabilityLeft(s) > minDurability) return true;
         }
         return false;
     }
@@ -62,11 +62,11 @@ public final class ToolManager {
     public static ToolInfo describe(ClientPlayerEntity p) {
         if (p == null) return new ToolInfo(false, "NONE", 0);
         ItemStack held = p.getInventory().getStack(p.getInventory().selectedSlot);
-        ItemStack use = held.getItem() instanceof PickaxeItem ? held : ItemStack.EMPTY;
+        ItemStack use = held.isIn(ItemTags.PICKAXES) ? held : ItemStack.EMPTY;
         if (use.isEmpty()) {
             for (int i = 0; i < 9; i++) {
                 ItemStack s = p.getInventory().getStack(i);
-                if (s.getItem() instanceof PickaxeItem) {
+                if (s.isIn(ItemTags.PICKAXES)) {
                     use = s;
                     break;
                 }
