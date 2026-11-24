@@ -25,7 +25,7 @@ public final class BlockWhitelist {
         for (String id : selection.selectedIds()) {
             Identifier i = Identifier.tryParse(id);
             if (i == null) continue;
-            Registries.BLOCK.getOrEmpty(i).ifPresent(s::add);
+            if (Registries.BLOCK.containsId(i)) s.add(Registries.BLOCK.get(i));
         }
         s.remove(Blocks.AIR);
         blocks = s;

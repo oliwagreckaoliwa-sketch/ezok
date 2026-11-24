@@ -191,8 +191,8 @@ public final class MiningController {
             releaseKeys(c);
             return Outcome.STOP_NO_TOOL;
         }
-        if (slot >= 0 && p.getInventory().selectedSlot != slot) {
-            p.getInventory().selectedSlot = slot;
+        if (slot >= 0 && p.getInventory().getSelectedSlot() != slot) {
+            p.getInventory().setSelectedSlot(slot);
         }
 
         // 4) celowanie i kopanie (tylko zaznaczone bloki)

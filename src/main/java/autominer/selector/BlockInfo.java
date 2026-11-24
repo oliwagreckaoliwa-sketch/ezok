@@ -23,7 +23,7 @@ public final class BlockInfo {
     public static Block block(String id) {
         Identifier i = Identifier.tryParse(id);
         if (i == null) return null;
-        return Registries.BLOCK.getOrEmpty(i).orElse(null);
+        return Registries.BLOCK.containsId(i) ? Registries.BLOCK.get(i) : null;
     }
 
     public static boolean registered(String id) {
@@ -50,7 +50,7 @@ public final class BlockInfo {
     public static Item item(String id) {
         Identifier i = Identifier.tryParse(id);
         if (i == null) return null;
-        return Registries.ITEM.getOrEmpty(i).orElse(null);
+        return Registries.ITEM.containsId(i) ? Registries.ITEM.get(i) : null;
     }
 
     public static String itemId(Item item) {

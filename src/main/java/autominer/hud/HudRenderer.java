@@ -56,9 +56,9 @@ public final class HudRenderer {
     public static void draw(DrawContext ctx, TextRenderer tr, List<AutoMinerHud.Line> lines,
                             int x, int y, float scale, float opacity) {
         int[] size = measure(tr, lines, 1f);
-        ctx.getMatrices().push();
-        ctx.getMatrices().translate(x, y, 0);
-        ctx.getMatrices().scale(scale, scale, 1f);
+        ctx.getMatrices().pushMatrix();
+        ctx.getMatrices().translate((float) x, (float) y);
+        ctx.getMatrices().scale(scale, scale);
         Draw.card(ctx, 0, 0, size[0], size[1], 5, 0xFF111317, opacity);
         int yy = PAD;
         for (AutoMinerHud.Line l : lines) {
@@ -69,7 +69,7 @@ public final class HudRenderer {
             ctx.drawText(tr, l.text(), PAD, yy, Draw.alpha(l.color(), Math.min(1f, opacity + 0.25f)), false);
             yy += LINE_H;
         }
-        ctx.getMatrices().pop();
+        ctx.getMatrices().popMatrix();
     }
 
     private static void drawBlockLabel(DrawContext ctx, TextRenderer tr, MinecraftClient c) {

@@ -14,7 +14,7 @@ public final class InventoryWatcher {
 
     public static Map<String, Integer> snapshot(ClientPlayerEntity p) {
         Map<String, Integer> m = new HashMap<>();
-        for (ItemStack s : p.getInventory().main) {
+        for (ItemStack s : p.getInventory().getMainStacks()) {
             if (s.isEmpty()) continue;
             m.merge(Registries.ITEM.getId(s.getItem()).toString(), s.getCount(), Integer::sum);
         }

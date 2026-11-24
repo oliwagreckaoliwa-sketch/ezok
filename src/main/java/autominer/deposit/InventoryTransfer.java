@@ -25,7 +25,7 @@ public final class InventoryTransfer {
 
     public static Map<String, Integer> matchingCounts(ClientPlayerEntity p, Set<String> filter) {
         Map<String, Integer> m = new HashMap<>();
-        for (ItemStack s : p.getInventory().main) {
+        for (ItemStack s : p.getInventory().getMainStacks()) {
             if (s.isEmpty()) continue;
             String id = BlockInfo.itemId(s.getItem());
             if (filter.contains(id)) m.merge(id, s.getCount(), Integer::sum);

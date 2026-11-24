@@ -5,7 +5,10 @@ import autominer.config.ConfigManager;
 import autominer.keybinds.KeybindManager;
 import autominer.mining.AutoMiningManager;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.input.KeyInput;
+import net.minecraft.client.input.CharInput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
@@ -28,9 +31,7 @@ public final class MainScreen extends Screen {
     private final Ui ui = new Ui();
     private int tab;
 
-    public MainScreen() {
-        this(lastTab);
-    }
+    public MainScreen() { this(lastTab); }
 
     public MainScreen(int tab) {
         super(Text.literal("AutoMiner Ultimate"));
@@ -60,8 +61,6 @@ public final class MainScreen extends Screen {
 
         ui.alpha = open;
         Draw.card(ctx, px, py, pw, ph, 8, Draw.PANEL, open);
-
-        // naglowek
         ui.text("AUTOMINER ULTIMATE", px + 14, py + 10, ui.accent);
         ui.text(NAMES[tab], px + 14 + textRenderer.getWidth("AUTOMINER ULTIMATE") + 10, py + 10, Draw.MUTED);
         AutoMiningManager m = AutoMiner.mining;
@@ -76,7 +75,6 @@ public final class MainScreen extends Screen {
         ui.button("close", px + pw - 24, py + 6, 16, 16, "x", Ui.Style.GHOST, true, this::close);
         ui.rect(px + 8, py + 27, pw - 16, 1, 0, Draw.BORDER);
 
-        // sidebar
         int sx = px + 8;
         for (int i = 0; i < panels.length; i++) {
             int ry = py + 34 + i * 26;
@@ -90,7 +88,6 @@ public final class MainScreen extends Screen {
             ui.hit(sx, ry, SIDEBAR_W, 22, () -> switchTab(idx));
         }
 
-        // tresc
         float te = Draw.easeOut(ui.anim("tab", 1f, 7f));
         ui.alpha = open * te;
         int cx = px + 8 + SIDEBAR_W + 10;
@@ -100,26 +97,25 @@ public final class MainScreen extends Screen {
         int slide = Math.round((1f - te) * 16f);
         panels[tab].render(ui, cx + slide, cy, cw - slide, ch, client);
         ui.alpha = 1f;
-
         AutoMiner.notifications.render(ctx, textRenderer, width);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0 && ui.click(mouseX, mouseY)) return true;
-        return super.mouseClicked(mouseX, mouseY, button);
+    public boolean mouseClicked(Click click, boolean doubled) {
+        if (click.button() == 0 && ui.click(click.x(), click.y())) return true;
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (ui.drag(mouseX)) return true;
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    public boolean mouseDragged(Click click, double deltaX, double deltaY) {
+        if (ui.drag(click.x())) return true;
+        return super.mouseDragged(click, deltaX, deltaY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(Click click) {
         ui.release();
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(click);
     }
 
     @Override
@@ -129,28 +125,24 @@ public final class MainScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (ui.key(keyCode)) return true;
-        if (KeybindManager.openGui.matchesKey(keyCode, scanCode)) {
+    public boolean keyPressed(KeyInput input) {
+        if (ui.key(input.key())) return true;
+        if (KeybindManager.openGui.matchesKey(input)) {
             close();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(input);
     }
 
     @Override
-    public boolean charTyped(char chr, int modifiers) {
-        if (ui.charTyped(chr)) return true;
-        return super.charTyped(chr, modifiers);
+    public boolean charTyped(CharInput input) {
+        String value = input.asString();
+        if (!value.isEmpty() && ui.charTyped(value.charAt(0))) return true;
+        return super.charTyped(input);
     }
 
-    @Override
-    public boolean shouldPause() {
-        return false;
-    }
+    @Override public boolean shouldPause() { return false; }
 
     @Override
-    public void removed() {
-        ConfigManager.save();
-    }
+    public void removed() { ConfigManager.save(); }
 }
