@@ -7,7 +7,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
+import net.minecraft.client.render.VertexRendering;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
@@ -15,7 +16,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 
@@ -71,7 +71,7 @@ public final class BlockSelector {
             MatrixStack ms = ctx.matrices();
             if (consumers == null || ms == null) return;
             Vec3d cam = c.gameRenderer.getCamera().getCameraPos();
-            VertexConsumer vc = consumers.getBuffer(RenderLayer.getLines());
+            VertexConsumer vc = consumers.getBuffer(RenderLayers.lines());
             boolean drew = false;
 
             if (cfg.showOutline) {
@@ -88,7 +88,7 @@ public final class BlockSelector {
                 drew |= outline(c, ms, vc, cam, chest, 0.55f, 0.36f, 0.96f);
             }
             if (drew && consumers instanceof VertexConsumerProvider.Immediate imm) {
-                imm.draw(RenderLayer.getLines());
+                imm.draw(RenderLayers.lines());
             }
         });
     }
@@ -99,8 +99,9 @@ public final class BlockSelector {
         if (st.isAir()) return false;
         VoxelShape shape = st.getOutlineShape(c.world, pos, ShapeContext.of(c.player));
         if (shape.isEmpty()) return false;
-        Box box = shape.getBoundingBox().offset(pos).expand(0.003).offset(-cam.x, -cam.y, -cam.z);
-        WorldRenderer.drawBox(ms, vc, box, r, g, b, 1.0f);
+        VertexRendering.drawOutline(ms, vc, shape,
+                pos.getX() - cam.x, pos.getY() - cam.y, pos.getZ() - cam.z,
+                net.minecraft.util.math.ColorHelper.getArgb(255, Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)), 1.0f);
         return true;
     }
 }
