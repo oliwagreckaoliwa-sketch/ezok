@@ -168,7 +168,7 @@ public final class AutoDepositManager {
         if (err < 4.0 && h instanceof BlockHitResult bhr && h.getType() == HitResult.Type.BLOCK
                 && AutoMiner.chests.matches(c, bhr.getBlockPos())) {
             ActionResult r = c.interactionManager.interactBlock(c.player, Hand.MAIN_HAND, bhr);
-            if (r.shouldSwingHand()) c.player.swingHand(Hand.MAIN_HAND);
+            if (r.isAccepted()) c.player.swingHand(Hand.MAIN_HAND);
             phase = Phase.OPENING;
             phaseStart = tick;
         }
